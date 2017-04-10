@@ -1,0 +1,31 @@
+{
+  "name": "apps4va",
+  "description": "TBD",
+  "main": "gulp",
+  "authors": [
+    "Neha Dil",
+    "Amu Manoj",
+    "Jared Beller",
+    "Nick Coutlakis",
+    "Acadia Lewis",
+    "Brandon Mohan",
+    "Cole Szymonik",
+    "Nigel Tracy"
+  ],
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/hcps-bellerjb/Apps4VA",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bourbon": "^4.3.3",
+    "breakpoint-sass": "^2.7.1",
+    "sassline": "^2.1.2",
+    "susy": "^2.2.12"
+  }
+}

@@ -1,0 +1,24 @@
+mixin header(titleName)
+  doctype html
+  - var pages = {"Explore":"index","About":"about","IDK":"pg3"}
+  html
+    head
+      title=titleName
+        |  | Website Title
+      meta(charset="utf-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1")
+      each page, name in pages
+        if name==titleName
+          link(rel="stylesheet", href=page + ".css")
+    body
+      .header
+        .logo
+        .menu
+          ul
+            each page, name in pages
+              li.menuItem
+                if name==titleName
+                  a.current(href='#')=name
+                else
+                  a(href=page + ".html")=name
+      block

@@ -1,2 +1,10 @@
+bower_components/
+node_modules/
+dev/
+dist/
+.sass-lint.yml
+.jshintrc
 .sass-cache/
+.DS_STORE
 *.css.map
+*.sketch

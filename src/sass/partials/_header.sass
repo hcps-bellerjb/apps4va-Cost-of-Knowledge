@@ -1,0 +1,70 @@
+.header
+  background-color: $backgroundColor
+  font-size: 0
+
+  .logo
+    background-image: url(img/logo.svg)
+    background-size: 132px 19px
+    color: transparent
+    display: inline-block
+    height: 19px
+    margin: 2rem 0 2rem 2rem
+    position: relative
+    vertical-align: middle
+    width: 132px
+
+    a
+      bottom: 0
+      left: 0
+      position: absolute
+      right: 0
+      top: 0
+
+.menu
+  display: inline-block
+  width: calc(100% - 132px - 2rem)
+  vertical-align: middle
+
+  ul
+    border: 0
+    background-color: transparent
+    margin-left: 0
+    text-align: right
+    width: 100%
+
+  li
+    font-family: unquote(map-get($headingtype, font-family))
+    font-style: normal
+    font-weight: map-get($headingtype, regular)
+    display: inline-block
+    letter-spacing: 0.1rem
+    margin-right: 2rem
+    padding: 1rem 0
+    text-transform: uppercase
+    width: auto
+
+    +fontsize(12, 0)
+
+    a, span
+      user-select: none
+      border: 0
+      color: $captionColor
+      display: inline
+      padding: 0
+      cursor: pointer
+
+      &:hover, &:active, &:focus
+        background-color: transparent
+        color: $linkColor
+
+    +breakpoint(break-1)
+      +fontsize(12, 1)
+
+    +breakpoint(break-2)
+      +fontsize(12, 2)
+
+    +breakpoint(break-3)
+      +fontsize(12, 3)
+
+    +breakpoint(break-4)
+      +fontsize(12, 4)
