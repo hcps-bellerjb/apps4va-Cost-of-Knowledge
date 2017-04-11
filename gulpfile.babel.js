@@ -1,7 +1,11 @@
 import gulp from 'gulp';
 import sass from 'gulp-sass';
 import pug from 'gulp-pug';
-import babel from 'gulp-babel';
+
+import rollup from 'gulp-better-rollup';
+import rollupCommonJS from 'rollup-plugin-commonjs';
+import rollupNodeResolve from 'rollup-plugin-node-resolve';
+import rollupBabel from 'rollup-plugin-babel';
 
 import postcss from 'gulp-postcss';
 import uncss from 'postcss-uncss';
@@ -9,9 +13,7 @@ import autoprefixer from 'autoprefixer';
 
 import cleanCSS from 'gulp-clean-css';
 import uglify from 'gulp-uglify';
-import concat from 'gulp-concat';
 import sourcemaps from 'gulp-sourcemaps';
-import modernizr from 'gulp-modernizr';
 
 import fs from 'fs';
 import path from 'path';
@@ -44,15 +46,19 @@ gulp.task('pug', () => {
 });
 
 gulp.task('javascript', () => {
-  gulp.src(['src/js/**/*.js'])
+  gulp.src(['src/js/app.js'])
     .pipe(sourcemaps.init({
       loadMaps: true
     }))
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(modernizr())
-    .pipe(concat('app.js'))
+    .pipe(rollup({
+      plugins: [
+        rollupCommonJS(),
+        rollupNodeResolve(),
+        rollupBabel({
+          exclude: 'node_modules/**'
+        })
+      ]
+    }, 'umd'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dev'));
   browserSync.reload();
@@ -68,6 +74,7 @@ gulp.task('serve', ['pug', 'sass', 'javascript'], () => {
 gulp.task('dev', ['serve'], () => {
   gulp.watch('src/sass/**/*.sass', ['sass']);
   gulp.watch('src/pug/**/*.pug', ['pug']);
+  gulp.watch('src/js/**/*.js', ['javascript']);
 });
 
 gulp.task('minSASS', () => {
@@ -91,14 +98,19 @@ gulp.task('minPug', () => {
 });
 
 gulp.task('minJavascript', () => {
-  gulp.src(['src/js/**/*.js'])
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(modernizr())
-    .pipe(concat('app.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist'));
+  gulp.src(['src/js/app.js'])
+      .pipe(rollup({
+        plugins: [
+          rollupCommonJS(),
+          rollupNodeResolve(),
+          rollupBabel({
+            exclude: 'node_modules/**'
+          })
+        ]
+      }, 'umd'))
+      .pipe(uglify())
+      .pipe(gulp.dest('dist'));
+    browserSync.reload();
 });
 
 gulp.task('build', ['minPug', 'minSASS', 'minJavascript']);

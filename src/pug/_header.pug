@@ -7,6 +7,7 @@ mixin header(titleName)
         |  | Website Title
       meta(charset="utf-8")
       meta(name="viewport", content="width=device-width, initial-scale=1")
+      link(rel="shortcut icon", href="img/favicon.ico")
       each page, name in pages
         if name==titleName
           link(rel="stylesheet", href=page + ".css")
@@ -21,4 +22,5 @@ mixin header(titleName)
                   a.current(href='#')=name
                 else
                   a(href=page + ".html")=name
-      block
+      #baseline
+        block

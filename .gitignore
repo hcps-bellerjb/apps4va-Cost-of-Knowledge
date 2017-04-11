@@ -6,5 +6,8 @@ dist/
 .jshintrc
 .sass-cache/
 .DS_STORE
+npm-debug.log
 *.css.map
 *.sketch
+
+tokens.js
