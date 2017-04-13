@@ -17,6 +17,7 @@ import sourcemaps from 'gulp-sourcemaps';
 
 import fs from 'fs';
 import path from 'path';
+import plumber from 'gulp-plumber';
 import browserSync from 'browser-sync';
 
 gulp.task('sass', () => {
@@ -27,6 +28,7 @@ gulp.task('sass', () => {
     })
   ];
   gulp.src('src/sass/**/*.sass')
+    .pipe(plumber())
     .pipe(sourcemaps.init({
       loadMaps: true
     }))
@@ -35,10 +37,17 @@ gulp.task('sass', () => {
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dev'))
     .pipe(browserSync.stream());
+
+  // Assets
+  gulp.src('src/assets/img/**')
+    .pipe(gulp.dest('dev/img'));
+  gulp.src('src/assets/fonts/**')
+    .pipe(gulp.dest('dev/fonts'));
 });
 
 gulp.task('pug', () => {
   return gulp.src(['src/pug/**/*.pug', '!src/pug/**/_*.pug'])
+    .pipe(plumber())
     .pipe(pug({
       pretty: true
     }))
@@ -46,7 +55,8 @@ gulp.task('pug', () => {
 });
 
 gulp.task('javascript', () => {
-  gulp.src(['src/js/app.js'])
+  return gulp.src(['src/js/app.js'])
+    .pipe(plumber())
     .pipe(sourcemaps.init({
       loadMaps: true
     }))
@@ -61,7 +71,6 @@ gulp.task('javascript', () => {
     }, 'umd'))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dev'));
-  browserSync.reload();
 });
 
 gulp.task('serve', ['pug', 'sass', 'javascript'], () => {
@@ -69,6 +78,7 @@ gulp.task('serve', ['pug', 'sass', 'javascript'], () => {
     server: "./dev"
   });
   gulp.watch("dev/**/*.html").on('change', browserSync.reload);
+  gulp.watch("dev/**/*.js").on('change', browserSync.reload);
 });
 
 gulp.task('dev', ['serve'], () => {
@@ -89,6 +99,12 @@ gulp.task('minSASS', () => {
     .pipe(postcss(plugins))
     .pipe(cleanCSS())
     .pipe(gulp.dest('dist'));
+
+  // Assets
+  gulp.src('src/assets/img/**')
+    .pipe(gulp.dest('dist/img'));
+  gulp.src('src/assets/fonts/**')
+    .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('minPug', () => {
@@ -99,18 +115,18 @@ gulp.task('minPug', () => {
 
 gulp.task('minJavascript', () => {
   gulp.src(['src/js/app.js'])
-      .pipe(rollup({
-        plugins: [
-          rollupCommonJS(),
-          rollupNodeResolve(),
-          rollupBabel({
-            exclude: 'node_modules/**'
-          })
-        ]
-      }, 'umd'))
-      .pipe(uglify())
-      .pipe(gulp.dest('dist'));
-    browserSync.reload();
+    .pipe(rollup({
+      plugins: [
+        rollupCommonJS(),
+        rollupNodeResolve(),
+        rollupBabel({
+          exclude: 'node_modules/**'
+        })
+      ]
+    }, 'umd'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+  browserSync.reload();
 });
 
 gulp.task('build', ['minPug', 'minSASS', 'minJavascript']);

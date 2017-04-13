@@ -1,9 +1,10 @@
 include _header.pug
 +header("Explore")
-  .container
-    #map
-    #analysis
-      p.
-        Hello World!
-
+  include _map.pug
+  section#baseline
+    .section.typeset
+      .single-measure
+        #analysis
+          p
+            | Hello World!
 script(src='app.js')

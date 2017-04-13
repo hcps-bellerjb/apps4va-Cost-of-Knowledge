@@ -9,5 +9,9 @@ dist/
 npm-debug.log
 *.css.map
 *.sketch
-
+*.eot
+*.svg
+*.ttf
+*.woff
+*.woff2
 tokens.js
