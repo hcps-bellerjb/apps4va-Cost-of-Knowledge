@@ -3,6 +3,11 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl.js';
 
 mapboxgl.accessToken = tokens.mapbox;
 
+// GLOBALS
+let overlay = document.querySelector('.map-overlay>section#baseline');
+let focus = false;
+
+// MAP
 let map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/sevaric/cj1eip4bc002n2rtcu9xo1j35',
@@ -14,71 +19,76 @@ let map = new mapboxgl.Map({
   compact: true
 })).on('load', () => {
   resetBounds(map);
+
+  console.log(map.getZoom());
+  console.log(map.getCenter());
+
+  // Tooltip for Names
+  map.on('mousemove', 'va-countiesgeojson', (e) => {
+    map.getCanvas().style.cursor = 'pointer';
+    let county = e.features;
+    if (county.length > 0 && focus === false) {
+      overlay.innerHTML = '';
+      let title = document.createElement('h2');
+      title.textContent = county.properties.NAME10;
+      let info = document.createElement('p');
+      info.textContent = "TEST_VAL";
+      overlay.appendChild(title)
+        .appendChild(info);
+      overlay.style.display = 'block';
+    } else if (focus === true) {
+      overlay.style.display = 'none';
+    }
+  });
+
+  map.on('mouseleave', 'va-countiesgeojson', (e) => {
+    map.getCanvas().style.cursor = '';
+    overlay.style.display = 'none';
+  });
+
+  // Zoom in and out on map
+  map.on('click', 'va-countiesgeojson', (e) => {
+    let county = e.features;
+    if (county.length > 0 && focus === false) {
+      focus = true;
+      zoomToFeature(county, map);
+    } else {
+      focus = false;
+      resetBounds(map);
+    }
+  });
 });
 
-console.log(map.getLayer());
-
-let resetBounds = (target) => {
-  // Zoom to VA
-  target.fitBounds([
-    [-83.675415,
-      36.5407589
-    ],
-    [-75.1664349,
-      39.466012
-    ]
-  ], {
+// FUNCTIONS
+let zoomToFeature = (target, map) => {
+  map.fitBounds(queryBounds(target), {
     padding: 50
   });
 };
 
-// If and what county is focussed in on
-let focus = false;
-
-// Tooltip for Names
-map.on('mousemove', (e) => {
-  var county = map.queryRenderedFeatures(e.point, {
-    layers: ['va-countiesgeojson']
+let queryBounds = (feature) => {
+  let bounds = feature.reduce((bounds, item) => {
+    let geometry = item.geometry.coordinates;
+    let outerBounds = geometry.reduce((outerBounds, coordinates) => {
+      return outerBounds.extend(findBounds(coordinates));
+    }, new mapboxgl.LngLatBounds());
+    return bounds.extend(outerBounds);
   });
-  if (county.length > 0 && focus === false) {
-    //console.log(county[0]);
-    // Fill Data
-  } else {
-    // Add Invis Class
-  }
-});
+  return bounds;
+};
 
-let findBounds = (feature) => {
-  let geometry = feature.geometry.coordinates;
-  let outerBounds = geometry.reduce((outerBounds, coordinates) => {
-    let bounds = coordinates.reduce((bounds, coord) => {
-      return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[1]));
-    return outerBounds.extend(bounds);
+let findBounds = (geometry) => {
+  let bounds = geometry.reduce((bounds, coordinates) => {
+    return bounds.extend(coordinates);
   }, new mapboxgl.LngLatBounds());
-  return outerBounds;
+  return bounds;
 };
 
-let focusIn = (map, target) => {
-  focus = true;
-  map.fitBounds(findBounds(target), {
-    padding: 50
-  });
-};
-
-let focusOut = (map) => {
-  focus = false;
-  resetBounds(map);
-};
-
-// Zoom in and out on map
-map.on('click', 'va-countiesgeojson', (e) => {
-  var county = map.queryRenderedFeatures(e.point, {
-    layers: ['va-countiesgeojson']
-  });
-  if (county.length > 0 && focus === false) {
-    focusIn(map, county[0]);
-  } else {
-    focusOut(map);
-  }
+// INIT VALUES
+const Virginia = map.queryRenderedFeatures({
+  layers: ['va-countiesgeojson']
 });
+
+let resetBounds = (map) => {
+  zoomToFeature(Virginia, map);
+};
