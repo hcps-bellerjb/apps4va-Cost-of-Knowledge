@@ -83,7 +83,7 @@ gulp.task('serve', ['pug', 'sass', 'javascript'], () => {
 
 gulp.task('dev', ['serve'], () => {
   gulp.watch('src/sass/**/*.sass', ['sass']);
-  gulp.watch('src/pug/**/*.pug', ['pug']);
+  gulp.watch('src/pug/**/*.pug', ['pug', 'sass']);
   gulp.watch('src/js/**/*.js', ['javascript']);
 });
 
