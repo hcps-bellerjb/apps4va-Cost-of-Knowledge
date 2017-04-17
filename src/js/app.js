@@ -8,6 +8,8 @@ let overlay = document.querySelector('.map-overlay>.typeset');
 let focus = false;
 let Virginia;
 
+overlay.innerHTML = '<input id="search" type="text" placeholder="Search for a place..."/>';
+
 // MAP
 let map = new mapboxgl.Map({
   container: 'map',
@@ -24,6 +26,7 @@ let map = new mapboxgl.Map({
   });
 
   resetBounds(map);
+  searchSetup(map);
 
   // Tooltip for Names
   map.on('mousemove', 'va-countiesgeojson', (e) => {
@@ -45,7 +48,8 @@ let map = new mapboxgl.Map({
 
   map.on('mouseleave', 'va-countiesgeojson', (e) => {
     map.getCanvas().style.cursor = '';
-    overlay.parentNode.style.display = 'none';
+    overlay.innerHTML = '<input id="search" type="text" placeholder="Search for a place..."/>';
+    searchSetup(map);
   });
 
   // Zoom in and out on map
@@ -55,8 +59,10 @@ let map = new mapboxgl.Map({
       focus = true;
       overlay.parentNode.style.display = 'none';
       zoomToFeature(county, map);
+      map.setFilter('va-countiesgeojson', ['in', 'NAME10', county[0].properties.NAME10]);
     } else {
       resetBounds(map);
+      map.setFilter('va-countiesgeojson', ['!=', 'NAME10', '']);
       overlay.parentNode.style.display = 'block';
       focus = false;
     }
@@ -67,6 +73,35 @@ let map = new mapboxgl.Map({
 let zoomToFeature = (target, map) => {
   map.fitBounds(queryBounds(target), {
     padding: 50
+  });
+};
+
+let prevSearch = "";
+
+let searchSetup = (map) => {
+  let searchBox = document.getElementById('search');
+  searchBox.addEventListener('keyup', (e) => {
+    var value = e.target.value.trim().toLowerCase();
+
+    // Filter visible features that don't match the input value.
+    var filtered = Virginia.filter((feature) => {
+      var name = feature.properties.NAMELSAD10.trim().toLowerCase();
+      return name.indexOf(value) > -1;
+    });
+
+    // Set the filter to populate features into the layer.
+    map.setFilter('va-countiesgeojson', ['in', 'NAME10'].concat(filtered.map((feature) => {
+      return feature.properties.NAME10;
+    })));
+
+    if (value.length > prevSearch.length) {
+      zoomToFeature(map.queryRenderedFeatures({
+        layers: ['va-countiesgeojson']
+      }), map);
+    } else {
+      resetBounds(map);
+    }
+    prevSearch = value;
   });
 };
 

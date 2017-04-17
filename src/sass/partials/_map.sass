@@ -12,9 +12,26 @@
   top: calc(29px + 4rem)
   left: 10px
   padding: 10px 10px 5px 10px
-  display: none
 
   .typeset
+    transition: 0.5s, ease-in-out
+
+    #search
+      background: none
+      border: none
+      transition: 0.5s, ease-in-out
+      width: 20vw
+      padding: 0 0 0 0.5rem
+      color: $headingColor
+      font-family: unquote(map-get($headingtype, font-family))
+      font-feature-settings: 'dlig', 'liga', 'lnum', 'kern'
+      font-style: normal
+      +fontsize(12, 0)
+
+    #search:focus
+      width: 40vw
+      outline: none
+
     h4
       padding-top: 0
     p
