@@ -40,12 +40,15 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.1.2",
     "mapbox-gl": "^0.35.0",
+    "papaparse": "^4.2.0",
+    "please-wait": "0.0.5",
     "postcss-uncss": "^0.14.0",
     "pug": "^2.0.0-beta11",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "simple-element-resize-detector": "^1.1.0",
     "uncss": "^0.14.1"
   }
 }

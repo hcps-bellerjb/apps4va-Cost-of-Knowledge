@@ -1,26 +1,32 @@
 #map
   height: calc(100vh - 4rem - 19px)
+  transition: right, 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
+
+#map.focus
+    width: 67vw
+    float: left
+    transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
 
 // TEMP
 .map-overlay
   background-color: $backgroundColor
   box-shadow: 0 1px 2px rgba(0,0,0,0.10)
-  transition: 0.5s, ease-in-out
+  transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
   border-radius: 3px
   position: absolute
-  min-width: 20vw
+  min-width: 16vw
   top: calc(29px + 4rem)
   left: 10px
   padding: 10px 10px 5px 10px
 
   .typeset
-    transition: 0.5s, ease-in-out
+    transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
 
     #search
       background: none
       border: none
-      transition: 0.5s, ease-in-out
-      width: 20vw
+      transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
+      width: 15vw
       padding: 0 0 0 0.5rem
       color: $headingColor
       font-family: unquote(map-get($headingtype, font-family))
@@ -29,7 +35,7 @@
       +fontsize(12, 0)
 
     #search:focus
-      width: 40vw
+      width: 30vw
       outline: none
 
     h4

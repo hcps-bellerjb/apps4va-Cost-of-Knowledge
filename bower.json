@@ -23,8 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "bourbon": "^4.3.3",
-    "breakpoint-sass": "^2.7.1",
     "sassline": "^2.1.2",
     "susy": "^2.2.12"
   }

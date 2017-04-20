@@ -12,14 +12,15 @@ mixin header(titleName)
         if name==titleName
           link(rel="stylesheet", href=page + ".css")
     body
-      .header
-        .logo
-        .menu
-          ul
-            each page, name in pages
-              li.menuItem
-                if name==titleName
-                  a.current(href='#')=name
-                else
-                  a(href=page + ".html")=name
-      block
+      .inner
+        .header
+          .logo
+          .menu
+            ul
+              each page, name in pages
+                li.menuItem
+                  if name==titleName
+                    a.current(href='#')=name
+                  else
+                    a(href=page + ".html")=name
+        block

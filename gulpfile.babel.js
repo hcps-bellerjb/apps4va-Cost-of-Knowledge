@@ -33,7 +33,7 @@ gulp.task('sass', () => {
       loadMaps: true
     }))
     .pipe(sass().on('error', sass.logError))
-    .pipe(postcss(plugins))
+    //.pipe(postcss(plugins))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dev'))
     .pipe(browserSync.stream());

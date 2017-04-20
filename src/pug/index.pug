@@ -1,10 +1,16 @@
 include _header.pug
 +header("Explore")
-  include _map.pug
-  section#baseline
-    .section.typeset
-      .single-measure
-        #analysis
-          p
-            | Hello World!
+  #sidebar.focus
+    section#baseline
+      .section.typeset
+        .single-measure
+          #analysis
+            p
+              | Hello World!
+  #map.focus
+  .map-overlay
+    .typeset
+      input#search(type='text', placeholder='Search for a place...')
+      h4 Place
+      p INFO
 script(src='app.js')
