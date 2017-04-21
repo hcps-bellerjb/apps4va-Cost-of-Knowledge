@@ -33,7 +33,7 @@ gulp.task('sass', () => {
       loadMaps: true
     }))
     .pipe(sass().on('error', sass.logError))
-    //.pipe(postcss(plugins))
+    .pipe(postcss(plugins))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dev'))
     .pipe(browserSync.stream());
@@ -43,6 +43,8 @@ gulp.task('sass', () => {
     .pipe(gulp.dest('dev/img'));
   gulp.src('src/assets/fonts/**')
     .pipe(gulp.dest('dev/fonts'));
+  gulp.src('src/assets/csv/**')
+    .pipe(gulp.dest('dev/data'));
 });
 
 gulp.task('pug', () => {
@@ -105,6 +107,8 @@ gulp.task('minSASS', () => {
     .pipe(gulp.dest('dist/img'));
   gulp.src('src/assets/fonts/**')
     .pipe(gulp.dest('dist/fonts'));
+  gulp.src('src/assets/csv/**')
+    .pipe(gulp.dest('dist/data'));
 });
 
 gulp.task('minPug', () => {

@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "sassline": "^2.1.2",
-    "susy": "^2.2.12"
+    "susy": "^2.2.12",
+    "please-wait": "^0.0.5"
   }
 }

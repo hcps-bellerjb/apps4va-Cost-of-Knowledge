@@ -1,9 +1,23 @@
 #sidebar
   float: right
   width: 0
+  height: calc(100vh - 4rem - 19px)
   background: $backgroundColor
   display: none
   transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
+  overflow: scroll
+
+  canvas
+  	+baseline(zeta, $bodytype, 2, 2, all)
+
+  canvas#income
+    height: 2rem
+
+  canvas#scores
+    height: 10rem
+
+  canvas#allocation
+    height: 10rem
 
 #sidebar.focus
   width: 33vw

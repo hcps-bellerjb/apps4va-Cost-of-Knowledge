@@ -4,13 +4,13 @@ mixin header(titleName)
   html
     head
       title=titleName
-        |  | Website Title
+        |  | The Cost of Knowledge
       meta(charset="utf-8")
       meta(name="viewport", content="width=device-width, initial-scale=1")
       link(rel="shortcut icon", href="img/favicon.ico")
       each page, name in pages
         if name==titleName
-          link(rel="stylesheet", href=page + ".css")
+          link(rel="stylesheet", href="index.css")
     body
       .inner
         .header

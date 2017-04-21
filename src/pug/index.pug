@@ -3,14 +3,44 @@ include _header.pug
   #sidebar.focus
     section#baseline
       .section.typeset
-        .single-measure
-          #analysis
-            p
-              | Hello World!
+        #analysis
+           h2 PLACE
+           canvas#income
+           p Income Thing
+           canvas#scores
+           p Scores
+           canvas#allocation
+           p Alloc
+
   #map.focus
   .map-overlay
-    .typeset
-      input#search(type='text', placeholder='Search for a place...')
-      h4 Place
-      p INFO
+    #omnibox
+      .typeset
+        input#search(type='text', placeholder='Search for a place...')
+        h4 Place
+        p Funds per Capita (14-15): 
+        p Average SOL Scores (14-15):
+        ul
+          li Writing: 
+          li Reading: 
+          li History: 
+          li Math: 
+          li Science: 
+    #menubox
+      form.typeset
+        input(type='radio', name='heatmap', value='perform' checked)
+        span Performance
+        br
+        input(type='radio', name='heatmap', value='fund')
+        span Funding
+        br
+        input(type='radio', name='heatmap', value='achieve')
+        span Achievement
+        br
+        select(name='year')
+          option(value='2011') 2011-2012
+          option(value='2012') 2012-2013
+          option(value='2013') 2013-2014
+          option(value='2014', selected) 2014-2015
+
 script(src='app.js')

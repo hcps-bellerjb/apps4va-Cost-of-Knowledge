@@ -26,11 +26,11 @@
       background: none
       border: none
       transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
-      width: 15vw
+      width: 20vw
       padding: 0 0 0 0.5rem
       color: $headingColor
       font-family: unquote(map-get($headingtype, font-family))
-      font-feature-settings: 'dlig', 'liga', 'lnum', 'kern'
+      font-feature-settings: 'dlig', 'liga', 'tnum', 'kern'
       font-style: normal
       +fontsize(12, 0)
 
@@ -41,4 +41,9 @@
     h4
       padding-top: 0
     p
+      font-feature-settings: 'kern', 'tnum', 'liga'
       margin-bottom: 0
+    ul
+      margin-bottom: 0
+      padding: 0 0 0 2rem
+      list-style-type: none
