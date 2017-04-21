@@ -25,10 +25,10 @@ overlay.innerHTML = '<input id="search" type="text" placeholder="Search for a pl
 var finance, sol;
 var year = '2014';
 
-const splitResolution = 30;
+const gradientResolution = 30;
 
-var performance, stops = new Array(splitResolution);
-var colors = tinygradient(['#f44336','#ffeb3b','#4caf50']).hsv(splitResolution, 'short').map((color) => {return color.toHexString()});
+var performance, stops = new Array(gradientResolution);
+var colors = tinygradient(['#f44336','#ffeb3b','#4caf50']).hsv(gradientResolution, 'short').map((color) => {return color.toHexString();});
 
 Papa.parse('data/finance.csv', {
   download: true,
@@ -66,22 +66,22 @@ var populatePerformance = (finance, sol) => {
 };
 
 var calculateStops = (performance) => {
-  var stepSize = performance.length / splitResolution;
+  var stepSize = performance.length / gradientResolution;
   let performanceS = performance.slice().sort();
-  for (var i = 0; i < splitResolution; i++) {
+  for (var i = 0; i < gradientResolution; i++) {
     stops[i] = performanceS[Math.round(stepSize * i)];
   }
 };
 
 var drawChoropleth = (map, performance, stops, state) => {
-  for (var i = 0; i < splitResolution; i++) {
+  for (var i = 0; i < gradientResolution; i++) {
     var layerFeatures = state.filter((elem, index, arr) => {
       var elemPerformance = performance[
         sol.findIndex((e) => {
           return (e.name.toLowerCase() === elem.properties.NAMELSAD10.toLowerCase());
         })
       ];
-      if (i === splitResolution - 1) {
+      if (i === gradientResolution - 1) {
         return (elemPerformance >= stops[i]);
       } else {
         return (elemPerformance >= stops[i] && elemPerformance < stops[i+1]);
@@ -123,7 +123,7 @@ var map = new mapboxgl.Map({
     "id": "va-countiesgeojson",
     "type": "fill",
     "source": "counties",
-    "source-layer": "va_countiesgeojson", 
+    "source-layer": "va_countiesgeojson",
     "paint": {
       "fill-outline-color": "#6B6B6B",
       "fill-color": "hsla(0, 0%, 0%, 0)"
@@ -155,13 +155,13 @@ var map = new mapboxgl.Map({
         var fund = document.createElement('p');
         fund.textContent = `Funds per Capita (14-15): $${finance[dataIndex].total_2014}`;
         var scoresIntro = document.createElement('p');
-        scoresIntro.textContent = "Average SOL Scores (14-15):"
+        scoresIntro.textContent = "Average SOL Scores (14-15):";
         var scores = document.createElement('ul');
         scores.innerHTML = `<li>Writing: ${sol[dataIndex].writing_2014}</li>
                             <li>Reading: ${sol[dataIndex].reading_2014}</li>
                             <li>History: ${sol[dataIndex].history_2014}</li>
                             <li>Math: ${sol[dataIndex].math_2014}</li>
-                            <li>Science: ${sol[dataIndex].science_2014}</li>`
+                            <li>Science: ${sol[dataIndex].science_2014}</li>`;
         overlay.appendChild(title);
         overlay.appendChild(fund);
         overlay.appendChild(scoresIntro);
@@ -261,12 +261,12 @@ const overlaySetup = (map) => {
 
   document.querySelector('#menubox>form>select').addEventListener('change', () => {
     year = document.querySelector('#menubox>form>select').value;
-    for (var i = 0; i < splitResolution; i++) {
+    for (var i = 0; i < gradientResolution; i++) {
       map.removeLayer(`choropleth${i}`);
     }
-    for (var i = 0; i < radios.length; i++) {
-      if (radios[i].checked) {
-          updateMap(radios[i].value);
+    for (var d = 0; d < radios.length; d++) {
+      if (radios[d].checked) {
+          updateMap(radios[d].value);
           break;
       }
     }
@@ -274,7 +274,7 @@ const overlaySetup = (map) => {
 
   radios[0].addEventListener('change', () => {
     if (radios[0].checked) {
-      for (var i = 0; i < splitResolution; i++) {
+      for (var i = 0; i < gradientResolution; i++) {
         map.removeLayer(`choropleth${i}`);
       }
       updateMap(radios[0].value);
@@ -283,7 +283,7 @@ const overlaySetup = (map) => {
 
   radios[1].addEventListener('change', () => {
     if (radios[1].checked) {
-      for (var i = 0; i < splitResolution; i++) {
+      for (var i = 0; i < gradientResolution; i++) {
         map.removeLayer(`choropleth${i}`);
       }
       updateMap(radios[1].value);
@@ -292,7 +292,7 @@ const overlaySetup = (map) => {
 
   radios[2].addEventListener('change', () => {
     if (radios[2].checked) {
-      for (var i = 0; i < splitResolution; i++) {
+      for (var i = 0; i < gradientResolution; i++) {
         map.removeLayer(`choropleth${i}`);
       }
       updateMap(radios[2].value);
@@ -308,7 +308,7 @@ var updateMap = (mode => {
   } else if (mode === "fund") {
     performance = finance.map((county) => {
       return county[`total_${year}`];
-    })
+    });
     calculateStops(performance);
     drawChoropleth(map, performance, stops, Virginia);
   } else if (mode === "achieve") {
