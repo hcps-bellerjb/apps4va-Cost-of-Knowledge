@@ -1,6 +1,25 @@
 include _header.pug
 +header("About")
   section#baseline
-    .section.typeset
-       h1 Stuff
-       p Cool
+    .typeset
+      .section
+        h3#project Project Info: 
+        p This tool allows for students, teachers, parents and governmental workers to observe the impact that funding has on student performance in standardized tests in Virginia. This app correlates the local funding of each county by dollars per student and matches it to SOL score statistics in the area. However, the correlation reaches beyond this simple idea. When comparing how allocation of funding in counties of Virginia with high test scores and low test scores, it can be proven that not only is the amount of money per capita a factor, but the usage of those funds in areas such as textbooks or sports have a significant impact as well. 
+
+        h3#about About Us: 
+        ul(style="margin-left:3rem")
+          li Neha Dil - 10th Grade - Project Manager
+          li Amu Manoj - 11th Grade - Project Lead
+          li Jared Beller - 10th Grade - Lead Developer
+          li Nigel Tracey - 11th grade - Developer
+          li Acadia Lewis - 10th Grade - Developer
+          li Brandon Mohan - 11th Grade - Developer
+          li Nicholas Syzmonik - 10th Grade - Developer
+          li Nicholas Coutlakis - 10th Grade - Developer
+        
+        h3#data Data:
+        p All data provided by VDOE:
+          br
+          a(href="/data/finance.csv", style="margin-left:2rem") Finance Data
+          br
+          a(href="/data/sol.csv", style="margin-left:2rem") SOL Data

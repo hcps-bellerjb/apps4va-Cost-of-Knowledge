@@ -7,17 +7,43 @@
     float: left
     transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
 
-// TEMP
-.map-overlay
-  background-color: $backgroundColor
+.map-legend
+  top: calc(29px + 4rem)
+  right: 10px
+  padding: 10px 10px 5px 10px
+  position: absolute
   box-shadow: 0 1px 2px rgba(0,0,0,0.10)
+  background-color: $backgroundColor
   transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
   border-radius: 3px
-  position: absolute
-  min-width: 16vw
+  font-family: unquote(map-get($headingtype, font-family))
+  font-feature-settings: 'dlig', 'liga', 'tnum', 'kern'
+  font-style: normal
+  +fontsize(12, 0)
+
+.bar
+  width: 1rem
+
+// TEMP
+.map-overlay
   top: calc(29px + 4rem)
   left: 10px
   padding: 10px 10px 5px 10px
+  position: absolute
+
+  #menubox, #omnibox
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10)
+    background-color: $backgroundColor
+    transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
+    border-radius: 3px
+
+  #menubox
+    margin-top: 0.5rem
+    padding: 0.5rem 0.5rem 0 0.5rem
+    float: left
+
+  #omnibox
+    padding: 10px 10px 5px 10px
 
   .typeset
     transition: 0.5s, cubic-bezier(0.4, 0, 0.2, 1)
@@ -38,6 +64,11 @@
       width: 30vw
       outline: none
 
+    font-family: unquote(map-get($headingtype, font-family))
+    font-feature-settings: 'dlig', 'liga', 'tnum', 'kern'
+    font-style: normal
+    +fontsize(12, 0)
+
     h4
       padding-top: 0
     p
@@ -45,5 +76,5 @@
       margin-bottom: 0
     ul
       margin-bottom: 0
-      padding: 0 0 0 2rem
+      padding: 0 0 0 1rem
       list-style-type: none

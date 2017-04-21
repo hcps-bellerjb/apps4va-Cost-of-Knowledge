@@ -22,6 +22,7 @@ var overlay = document.querySelector('#omnibox>.typeset'), focus = false, Virgin
 overlay.innerHTML = '<input id="search" type="text" placeholder="Search for a place..."/>';
 
 // DATA
+let lastMode = "perform";
 var finance, sol;
 var year = '2014';
 
@@ -151,7 +152,7 @@ var map = new mapboxgl.Map({
         overlay.innerHTML = '';
         var dataIndex = sol.findIndex((e) => {return (e.name.toLowerCase() === county.properties.NAMELSAD10.toLowerCase());});
         var title = document.createElement('h4');
-        title.textContent = county.properties.NAME10;
+        title.textContent = county.properties.NAMELSAD10;
         var fund = document.createElement('p');
         fund.textContent = `Funds per Capita (14-15): $${finance[dataIndex].total_2014}`;
         var scoresIntro = document.createElement('p');
@@ -257,68 +258,56 @@ const overlaySetup = (map) => {
     prevSearch = value;
   });
 
-  var radios = document.getElementsByName('heatmap');
-
   document.querySelector('#menubox>form>select').addEventListener('change', () => {
     year = document.querySelector('#menubox>form>select').value;
-    for (var i = 0; i < gradientResolution; i++) {
-      map.removeLayer(`choropleth${i}`);
-    }
-    for (var d = 0; d < radios.length; d++) {
-      if (radios[d].checked) {
-          updateMap(radios[d].value);
-          break;
-      }
-    }
+    updateMap(lastMode);
   });
 
-  radios[0].addEventListener('change', () => {
-    if (radios[0].checked) {
-      for (var i = 0; i < gradientResolution; i++) {
-        map.removeLayer(`choropleth${i}`);
-      }
-      updateMap(radios[0].value);
-    }
+  document.querySelector('a#perform').addEventListener('click', () => {
+    updateMap("perform");
+    document.querySelector('a#perform').style.textDecoration = 'underline';
+    document.querySelector('a#fund').style.textDecoration = 'none';
+    document.querySelector('a#achieve').style.textDecoration = 'none';
   });
-
-  radios[1].addEventListener('change', () => {
-    if (radios[1].checked) {
-      for (var i = 0; i < gradientResolution; i++) {
-        map.removeLayer(`choropleth${i}`);
-      }
-      updateMap(radios[1].value);
-    }
+  document.querySelector('a#fund').addEventListener('click', () => {
+    updateMap("fund");
+    document.querySelector('a#perform').style.textDecoration = 'none';
+    document.querySelector('a#fund').style.textDecoration = 'underline';
+    document.querySelector('a#achieve').style.textDecoration = 'none';
   });
-
-  radios[2].addEventListener('change', () => {
-    if (radios[2].checked) {
-      for (var i = 0; i < gradientResolution; i++) {
-        map.removeLayer(`choropleth${i}`);
-      }
-      updateMap(radios[2].value);
-    }
+  document.querySelector('a#achieve').addEventListener('click', () => {
+    updateMap("achieve");
+    document.querySelector('a#perform').style.textDecoration = 'none';
+    document.querySelector('a#fund').style.textDecoration = 'none';
+    document.querySelector('a#achieve').style.textDecoration = 'underline';
   });
 };
 
-var updateMap = (mode => {
+var updateMap = (mode) => {
+  for (var i = 0; i < gradientResolution; i++) {
+    map.removeLayer(`choropleth${i}`);
+  }
   if (mode === "perform") {
+    lastMode = "perform";
     populatePerformance(finance, sol);
     calculateStops(performance);
     drawChoropleth(map, performance, stops, Virginia);
   } else if (mode === "fund") {
+    lastMode = "fund";
     performance = finance.map((county) => {
       return county[`total_${year}`];
     });
     calculateStops(performance);
     drawChoropleth(map, performance, stops, Virginia);
   } else if (mode === "achieve") {
+    lastMode = "achieve";
     performance = sol.map((county) => {
       return (county[`history_${year}`] + county[`math_${year}`] + county[`reading_${year}`] + county[`science_${year}`] + county[`writing_${year}`]) / 5;
     });
     calculateStops(performance);
     drawChoropleth(map, performance, stops, Virginia);
   }
-});
+};
 
 // It just works ;)
 const queryBounds = (featureList) => {
@@ -423,22 +412,27 @@ const focusFeature = (target, map) => {
       labels: ["11-12", "12-13", "13-14", "14-15"],
       datasets: [{
         borderColor: "#FFCE56",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         label: 'Writing',
         data: [testData.writing_2011, testData.writing_2012, testData.writing_2013, testData.writing_2014]
       }, {
         borderColor: "#4BC0C0",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         label: 'Reading',
         data: [testData.reading_2011, testData.reading_2012, testData.reading_2013, testData.reading_2014]
       }, {
-        borderColor: "#E7E9ED",
+        borderColor: "#28292B",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         label: 'History',
         data: [testData.history_2011, testData.history_2012, testData.history_2013, testData.history_2014]
       }, {
         borderColor: "#FF6384",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         label: 'Math',
         data: [testData.math_2011, testData.math_2012, testData.math_2013, testData.math_2014]
       }, {
         borderColor: "#36A2EB",
+        backgroundColor: "rgba(0, 0, 0, 0)",
         label: 'Science',
         data: [testData.science_2011, testData.science_2012, testData.science_2013, testData.science_2014]
       }],

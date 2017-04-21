@@ -128,9 +128,12 @@ gulp.task('minJavascript', () => {
         })
       ]
     }, 'umd'))
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(gulp.dest('dist'));
-  browserSync.reload();
 });
 
-gulp.task('build', ['minPug', 'minSASS', 'minJavascript']);
+gulp.task('build', ['minPug', 'minSASS', 'minJavascript'], () => {
+  browserSync.init({
+    server: "./dist"
+  });
+});
