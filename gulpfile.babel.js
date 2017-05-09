@@ -6,14 +6,15 @@ import rollup from 'gulp-better-rollup';
 import rollupCommonJS from 'rollup-plugin-commonjs';
 import rollupNodeResolve from 'rollup-plugin-node-resolve';
 import rollupBabel from 'rollup-plugin-babel';
+import rollupUglify from 'rollup-plugin-uglify';
 
 import postcss from 'gulp-postcss';
 import uncss from 'postcss-uncss';
 import autoprefixer from 'autoprefixer';
 
 import cleanCSS from 'gulp-clean-css';
-import uglify from 'gulp-uglify';
 import sourcemaps from 'gulp-sourcemaps';
+import uglify from 'uglify-js-harmony';
 
 import fs from 'fs';
 import path from 'path';
@@ -41,7 +42,7 @@ gulp.task('sass', () => {
   // Assets
   gulp.src('src/assets/img/**')
     .pipe(gulp.dest('dev/img'));
-  gulp.src('src/assets/fonts/**')
+  gulp.src('src/assets/fonts/**/*.*')
     .pipe(gulp.dest('dev/fonts'));
   gulp.src('src/assets/csv/**')
     .pipe(gulp.dest('dev/data'));
@@ -96,19 +97,20 @@ gulp.task('minSASS', () => {
       html: ['dist/*.html']
     })
   ];
+
+  // Assets
+  gulp.src('src/assets/img/**')
+    .pipe(gulp.dest('dist/img'));
+  gulp.src('src/assets/fonts/**/*.*')
+    .pipe(gulp.dest('dist/fonts'));
+  gulp.src('src/assets/csv/**')
+    .pipe(gulp.dest('dist/data'));
+
   gulp.src('src/sass/**/*.sass')
     .pipe(sass().on('error', sass.logError))
     .pipe(postcss(plugins))
     .pipe(cleanCSS())
     .pipe(gulp.dest('dist'));
-
-  // Assets
-  gulp.src('src/assets/img/**')
-    .pipe(gulp.dest('dist/img'));
-  gulp.src('src/assets/fonts/**')
-    .pipe(gulp.dest('dist/fonts'));
-  gulp.src('src/assets/csv/**')
-    .pipe(gulp.dest('dist/data'));
 });
 
 gulp.task('minPug', () => {
@@ -118,22 +120,18 @@ gulp.task('minPug', () => {
 });
 
 gulp.task('minJavascript', () => {
-  gulp.src(['src/js/app.js'])
+  return gulp.src(['src/js/app.js'])
     .pipe(rollup({
       plugins: [
         rollupCommonJS(),
         rollupNodeResolve(),
         rollupBabel({
           exclude: 'node_modules/**'
-        })
+        }),
+        rollupUglify({}, uglify.minify)
       ]
     }, 'umd'))
-    //.pipe(uglify())
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['minPug', 'minSASS', 'minJavascript'], () => {
-  browserSync.init({
-    server: "./dist"
-  });
-});
+gulp.task('build', ['minPug', 'minSASS', 'minJavascript']);
